@@ -11,4 +11,4 @@ def auth_user(nom_utilisateur, mdp):
     if not check_password_hash(user.mot_de_passe, mdp):
         return None
     # Retourne un JWT token
-    return create_access_token(identity=user.id)
+    return create_access_token(identity=str(user.id))
