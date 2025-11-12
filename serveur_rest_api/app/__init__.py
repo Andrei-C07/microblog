@@ -19,6 +19,7 @@ def create_app():
     seeder = FlaskSeeder(app, db)
     socketio.init_app(app, cors_allowed_origins="*")
 
+
     register_routes(app)
 
     return app
