@@ -2,10 +2,12 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, View, Text, Button, StyleSheet, Image } from "react-native";
+import { useAuthStore } from "store/authStore";
 
 export default function LoginScreen() {
     const router = useRouter();
 
+    const authStore = useAuthStore();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -27,6 +29,7 @@ export default function LoginScreen() {
                 return;
             }
             router.navigate("/(tabs)/home");
+            authStore.setToken(data.token);
         } catch (err){
             console.log("Erreur de connexion:" + err);
         }
@@ -37,6 +40,7 @@ export default function LoginScreen() {
         <View style={styles.container}>
             <Image
                 source={require('../assets/images/MicroBlogLogo.png')}
+                style={{ width: 120, height: 120 }}
             />
             <Text>Connexion</Text>
             <TextInput

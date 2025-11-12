@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Image
-        source={require("../assets/images/MicroBlogLogo.png")}
+        source={require("../../assets/images/MicroBlogLogo.png")}
         style={styles.logo}
       />
       <FlatList
@@ -57,11 +57,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   logo: {
-    width: "20%",
     aspectRatio: 1,
+    width: 120,
+    height: 120,
     resizeMode: "contain",
     alignSelf: "center",
     marginVertical: 16,
+
   },
   postContainer: {
     marginBottom: 16,
