@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from sqlalchemy.orm import backref
 from .db import db
@@ -10,7 +10,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nom_utilisateur = db.Column(db.String(60), unique=True, nullable=False)
     mot_de_passe = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
     publications = db.relationship("Publication", backref="user", lazy=True)
 
@@ -34,7 +34,7 @@ class Publication(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(280), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
@@ -50,4 +50,4 @@ class Follow(db.Model):
     # User qui se fait follow par quelquun dautre
     following_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
