@@ -4,7 +4,6 @@ from flask_jwt_extended import JWTManager
 from .db import db, init_db
 from .ws import socketio
 
-
 def create_app():
     app = Flask(__name__)
 
@@ -26,6 +25,8 @@ def create_app():
 def register_routes(app):
     from app.routes.auth_routes import auth_bp
     from app.routes.user_routes import user_bp
+    from app.routes.publication_routes import publication_bp
 
     app.register_blueprint(auth_bp, url_prefix="/api/jeton")
     app.register_blueprint(user_bp, url_prefix="/api/utilisateur")
+    app.register_blueprint(publication_bp, url_prefix="/api/publication")

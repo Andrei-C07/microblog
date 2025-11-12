@@ -1,6 +1,4 @@
-from datetime import date, datetime
-
-from sqlalchemy.orm import backref
+from datetime import datetime
 from .db import db
 
 

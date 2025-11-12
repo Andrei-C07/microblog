@@ -35,7 +35,7 @@ def get_user(user_id):
     }
     return jsonify(result), 200
 
-@user_bp.get("/suivre/<int:user_id>")
+@user_bp.post("/suivre/<int:user_id>")
 @jwt_required()
 def suivre_utilisateur(user_id):
     current_user = get_jwt_identity()
@@ -49,15 +49,15 @@ def suivre_utilisateur(user_id):
 
     existing = Follow.query.filter_by(follower_id=current_user, following_id=user_id).first()
     if existing:
-        return jsonify({"message": "Utilisateur pas trouver"}), 404
+        return jsonify({"message": "Deja suivi"}), 404
 
-    new_follow = Follow(follower_id=me, following_id=user_id)
+    new_follow = Follow(follower_id=current_user, following_id=user_id)
     db.session.add(new_follow)
     db.session.commit()
 
     return jsonify({"message": "Followed successfully"}), 201
 
-@user_bp.get("/ne_plus_suivre/<int:user_id>")
+@user_bp.delete("/ne_plus_suivre/<int:user_id>")
 @jwt_required()
 def unfollow_user(user_id):
     current_user = get_jwt_identity()
