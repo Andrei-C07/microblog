@@ -1,5 +1,6 @@
 from flask import Blueprint, json, request, jsonify
 from app.services.auth_service import auth_user
+from flask_jwt_extended import jwt_required
 
 auth_bp = Blueprint("auth_bp", __name__)
 
@@ -20,3 +21,15 @@ def login():
         return jsonify({"error": "Info pas valide"}), 401
 
     return jsonify({"token": token}), 200
+
+from flask import Blueprint, json, request, jsonify
+from app.services.auth_service import auth_user
+
+auth_bp = Blueprint("auth_bp", __name__)
+
+
+auth_bp.post("deconnexion")
+jwt_required()
+def logout():
+    return jsonify({"message": "Deconnecter avec succes"}), 200
+    
