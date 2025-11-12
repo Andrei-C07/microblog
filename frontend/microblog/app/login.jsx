@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput, View, Text, Button, StyleSheet, Image, Alert } from "react-native";
+import { TextInput, View, Text, Button, StyleSheet, Image } from "react-native";
 
 export default function LoginScreen() {
     const router = useRouter();
