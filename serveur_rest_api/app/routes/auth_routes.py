@@ -29,4 +29,3 @@ from app.services.auth_service import auth_user
 @jwt_required()
 def logout():
     return jsonify({"message": "Deconnecter avec succes"}), 200
- 
