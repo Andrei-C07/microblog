@@ -1,11 +1,12 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models import User
+from app.models import User, Follow
+from app.db import db
 
 user_bp = Blueprint("user_bp", __name__)
 
 
-@user_bp.get("/", methods=["GET"])
+@user_bp.get("/")
 @jwt_required()
 def list_users():
     utilisateurs = User.query.all()
@@ -20,7 +21,7 @@ def list_users():
     return jsonify(result), 200
 
 
-@user_bp.get("/<int:user_id>", methods=["GET"])
+@user_bp.get("/<int:user_id>")
 @jwt_required()
 def get_user(user_id):
     user = User.query.get(user_id)
@@ -33,3 +34,39 @@ def get_user(user_id):
         "created_at": user.created_at.isoformat(),
     }
     return jsonify(result), 200
+
+@user_bp.get("/suivre/<int:user_id>")
+@jwt_required()
+def suivre_utilisateur(user_id):
+    current_user = get_jwt_identity()
+
+    if current_user == user_id:
+        return jsonify({"erreur": "Vous ne pouvez pas vous suivre"}), 400
+
+    utilisateur_cible = User.query.get(user_id)
+    if not utilisateur_cible:
+        return jsonify({"error": "Utilisateur pas trouver"}), 404
+
+    existing = Follow.query.filter_by(follower_id=current_user, following_id=user_id).first()
+    if existing:
+        return jsonify({"message": "Utilisateur pas trouver"}), 404
+
+    new_follow = Follow(follower_id=me, following_id=user_id)
+    db.session.add(new_follow)
+    db.session.commit()
+
+    return jsonify({"message": "Followed successfully"}), 201
+
+@user_bp.get("/ne_plus_suivre/<int:user_id>")
+@jwt_required()
+def unfollow_user(user_id):
+    current_user = get_jwt_identity()
+
+    follow_rel = Follow.query.filter_by(follower_id=current_user, following_id=user_id).first()
+    if not follow_rel:
+        return jsonify({"message": "Pas suivi"}), 200
+
+    db.session.delete(follow_rel)
+    db.session.commit()
+
+    return jsonify({"message": "Unfollowed successfully"}), 200
