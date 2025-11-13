@@ -14,7 +14,7 @@ export default function TabLayout() {
                     height: 60,
                     paddingBottom: 6,
                 },
-          }}
+            }}
         >
             <Tabs.Screen
                 name="home"
@@ -22,6 +22,15 @@ export default function TabLayout() {
                     title: "Home",
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="home-outline" color={color} size={size} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    title: "Profile",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="person-outline" color={color} size={size} />
                     ),
                 }}
             />

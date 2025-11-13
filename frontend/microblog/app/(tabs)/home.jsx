@@ -9,7 +9,6 @@ export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
 
   const token = useAuthStore((state) => state.token);
-  console.log("Token utilisé:", token);
 
   useEffect(() => {
     const fetchPosts = async () => {

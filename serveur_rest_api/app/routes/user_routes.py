@@ -30,10 +30,26 @@ def get_user(user_id):
 
     result = {
         "id": user.id,
-        "username": user.username,
+        "nom_utilisateur": user.nom_utilisateur,
         "created_at": user.created_at.isoformat(),
     }
     return jsonify(result), 200
+
+@user_bp.get("/current_user")
+@jwt_required()
+def get_current_user():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    if not user:
+        return jsonify({"error": "User pas trouvé"}), 404
+
+    result = {
+        "id": user.id,
+        "nom_utilisateur": user.nom_utilisateur,
+        "created_at": user.created_at.isoformat(),
+    }
+    return jsonify(result), 200
+
 
 @user_bp.post("/suivre/<int:user_id>")
 @jwt_required()
