@@ -11,7 +11,7 @@ Make the onpress for deconnexion work (clear zustand token -> redirect to login)
 Call /logout route from backend if you want flash message, optional tho
 */
 export default function ProfileScreen() {
-  const { token, userId, logout } = useAuthStore();
+  const { token, clearToken } = useAuthStore();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function ProfileScreen() {
       user={user}
       isCurrentUser
       onLogout={() => {
-        logout();
+        clearToken();
         router.replace("/");
       }}
     />
