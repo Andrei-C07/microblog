@@ -14,7 +14,7 @@ export default function TabLayout() {
                     height: 60,
                     paddingBottom: 6,
                 },
-          }}
+            }}
         >
             <Tabs.Screen
                 name="home"
@@ -31,6 +31,15 @@ export default function TabLayout() {
                     title: "Ajouter une publication",
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="add-circle-outline" color={color} size={size} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    title: "Profile",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="person-outline" color={color} size={size} />
                     ),
                 }}
             />
