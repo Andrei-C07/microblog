@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/authStore";
 
 export default function HomeScreen() {
-  const router = useRouter();
   const [posts, setPosts] = useState([]);
 
   const token = useAuthStore((state) => state.token);
