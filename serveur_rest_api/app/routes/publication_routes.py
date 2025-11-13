@@ -36,10 +36,12 @@ def get_publication(pub_id):
 
 @publication_bp.post("/")
 @jwt_required()
-def create_publication(current_user):
+def create_publication():
     data = request.get_json()
     if not data or "content" not in data:
         return jsonify({"error": "Contenu est requis."}), 400
+    
+    current_user = User.query.get(get_jwt_identity())
 
     new_pub = Publication(
         content=data["content"],
@@ -53,6 +55,6 @@ def create_publication(current_user):
         "id": new_pub.id,
         "content": new_pub.content,
         "auteur": current_user.nom_utilisateur
-    }, broadcast=True)
+    },)
 
     return jsonify({"message": "Publication creer", "id": new_pub.id}), 201

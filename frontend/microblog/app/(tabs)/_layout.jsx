@@ -25,6 +25,15 @@ export default function TabLayout() {
                     ),
                 }}
             />
+            <Tabs.Screen
+                name="new_post"
+                options={{
+                    title: "Ajouter une publication",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="add-circle-outline" color={color} size={size} />
+                    ),
+                }}
+            />
         </Tabs>
     )
 }
