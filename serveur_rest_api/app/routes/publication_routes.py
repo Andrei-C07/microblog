@@ -36,23 +36,25 @@ def get_publication(pub_id):
 
 @publication_bp.post("/")
 @jwt_required()
-def create_publication(current_user):
+def create_publication():
     data = request.get_json()
+    current_user = get_jwt_identity()
+
     if not data or "content" not in data:
         return jsonify({"error": "Contenu est requis."}), 400
 
     new_pub = Publication(
         content=data["content"],
-        user_id=current_user.id
+        user_id=current_user
     )
     db.session.add(new_pub)
     db.session.commit()
-
+    user = User.query.get(current_user)
     #web socket connection
     socketio.emit("new_publication", {
         "id": new_pub.id,
         "content": new_pub.content,
-        "auteur": current_user.nom_utilisateur
-    }, broadcast=True)
+        "auteur": user.nom_utilisateur,
+    })
 
     return jsonify({"message": "Publication creer", "id": new_pub.id}), 201

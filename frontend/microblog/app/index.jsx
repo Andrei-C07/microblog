@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput, View, Text, Button, StyleSheet, Image } from "react-native";
+import { TextInput, View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useAuthStore } from "store/authStore";
 
 export default function LoginScreen() {
@@ -15,7 +15,7 @@ export default function LoginScreen() {
         try {
             const response = await fetch("http://localhost:8000/api/jeton/", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     nom_utilisateur: username,
                     mot_de_passe: password,
@@ -24,52 +24,98 @@ export default function LoginScreen() {
 
             const data = await response.json();
             console.log(data);
-            if(!response.ok){
+            if (!response.ok) {
                 alert(data.error || "Erreur connexion")
                 return;
             }
             router.navigate("/(tabs)/home");
             authStore.setToken(data.token);
-        } catch (err){
+        } catch (err) {
             console.log("Erreur de connexion:" + err);
         }
     };
 
-    return(
-        <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-            <Image
-                source={require('../assets/images/MicroBlogLogo.png')}
-                style={{ width: 120, height: 120 }}
-            />
-            <Text>Connexion</Text>
-            <TextInput
-                placeholder="Nom d'utilisateur"
-                value={username}
-                onChangeText={setUsername}
-                autoCapitalize="none"
-            />
-            <TextInput
-                placeholder="Mot de passe"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                autoCapitalize="none"
-            />
+    return (
+        <SafeAreaView style={styles.container}>
+            <Text style={styles.title}>Connexion</Text>
 
-            <Button title="Se connecter" onPress={handleConnexion} />
-        </View>
+            <View style={styles.form}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Nom d’utilisateur"
+                    placeholderTextColor="#6E8F73"
+                    value={username}
+                    onChangeText={setUsername}
+                    autoCapitalize="False"
+                />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Mot de passe"
+                    placeholderTextColor="#6E8F73"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                    autoCapitalize="False"
+                />
+
+                <TouchableOpacity style={styles.button} onPress={handleConnexion}>
+                    <Text style={styles.buttonText}>Se connecter</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.logoContainer}>
+                <Image
+                    source={require("../assets/images/MicroBlogLogo.png")}
+                    style={{ width: 200, height: 200, resizeMode: "contain" }}
+                />
+
+            </View>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: "center",
         flex: 1,
-        padding: 24
+        backgroundColor: "#D99A79",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingVertical: 60,
     },
-    safeArea: {
-        flex: 1
+    title: {
+        fontSize: 36,
+        fontWeight: "600",
+        color: "#A7D8B4",
+    },
+    form: {
+        width: "80%",
+        alignItems: "center",
+        gap: 20,
+    },
+    input: {
+        width: "100%",
+        backgroundColor: "#A8DDB2",
+        padding: 14,
+        borderRadius: 10,
+        fontSize: 16,
+    },
+    button: {
+        backgroundColor: "#9ADFB0",
+        paddingVertical: 12,
+        paddingHorizontal: 40,
+        borderRadius: 20,
+        marginTop: 10,
+    },
+    buttonText: {
+        color: "#000",
+        fontSize: 16,
+        fontWeight: "600",
+    },
+    logoContainer: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        marginBottom: 20,
     }
 });
