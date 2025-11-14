@@ -5,27 +5,35 @@ import { useAuthStore } from "../../store/authStore";
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const token = useAuthStore((state) => state.token);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/publication/", {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des publications :", error);
-      }
-    };
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/publication/", {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setPosts(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des publications :", error);
+    }
+  };
 
+
+  useEffect(() => {
     fetchPosts();
   }, []);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchPosts()
+    setRefreshing(false);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,6 +44,8 @@ export default function HomeScreen() {
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id.toString()}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
         renderItem={({ item }) => (
           <View style={styles.postContainer}>
             <Text style={styles.postTitle}>Par : {item.auteur}</Text>

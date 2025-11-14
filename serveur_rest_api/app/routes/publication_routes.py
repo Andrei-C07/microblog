@@ -47,11 +47,11 @@ def create_publication():
 
     new_pub = Publication(
         content=data["content"],
-        user_id=current_user
+        user_id=current_user.id
     )
     db.session.add(new_pub)
     db.session.commit()
-    user = User.query.get(current_user)
+    
     #web socket connection
     socketio.emit("new_publication", {
         "id": new_pub.id,
