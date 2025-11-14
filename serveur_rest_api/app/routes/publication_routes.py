@@ -42,6 +42,8 @@ def create_publication():
 
     if not data or "content" not in data:
         return jsonify({"error": "Contenu est requis."}), 400
+    
+    current_user = User.query.get(get_jwt_identity())
 
     new_pub = Publication(
         content=data["content"],
@@ -54,7 +56,7 @@ def create_publication():
     socketio.emit("new_publication", {
         "id": new_pub.id,
         "content": new_pub.content,
-        "auteur": user.nom_utilisateur,
-    })
+        "auteur": current_user.nom_utilisateur
+    },)
 
     return jsonify({"message": "Publication creer", "id": new_pub.id}), 201

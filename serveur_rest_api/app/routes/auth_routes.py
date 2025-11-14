@@ -22,9 +22,6 @@ def login():
 
     return jsonify({"token": token}), 200
 
-from flask import Blueprint, json, request, jsonify
-from app.services.auth_service import auth_user
-
 @auth_bp.post("deconnexion")
 @jwt_required()
 def logout():
