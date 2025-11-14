@@ -60,3 +60,18 @@ def create_publication():
     },)
 
     return jsonify({"message": "Publication creer", "id": new_pub.id}), 201
+
+@publication_bp.get("/par_user/<int:user_id>")
+@jwt_required()
+def publications_par_user(user_id):
+    pubs = Publication.query.filter_by(user_id=user_id).order_by(Publication.created_at.desc()).all()
+    result = [
+        {
+            "id": p.id,
+            "content": p.content,
+            "created_at": p.created_at.isoformat()
+        }
+        for p in pubs
+    ]
+
+    return jsonify(result), 200

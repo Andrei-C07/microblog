@@ -43,10 +43,14 @@ def get_current_user():
     if not user:
         return jsonify({"error": "User pas trouvé"}), 404
 
+    followers_count = Follow.query.filter_by(following_id=user.id).count()
+    following_count = Follow.query.filter_by(follower_id=user.id).count()
     result = {
         "id": user.id,
         "nom_utilisateur": user.nom_utilisateur,
         "created_at": user.created_at.isoformat(),
+        "followers_count": followers_count,
+        "following_count": following_count,
     }
     return jsonify(result), 200
 
