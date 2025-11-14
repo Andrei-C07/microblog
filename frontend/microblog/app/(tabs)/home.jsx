@@ -5,6 +5,7 @@ import { useAuthStore } from "../../store/authStore";
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const token = useAuthStore((state) => state.token);
 
@@ -27,6 +28,12 @@ export default function HomeScreen() {
     fetchPosts();
   }, []);
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    fetchPosts()
+    setRefreshing(false);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -36,6 +43,8 @@ export default function HomeScreen() {
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id.toString()}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
         renderItem={({ item }) => (
           <View style={styles.postContainer}>
             <Text style={styles.postTitle}>Par : {item.auteur}</Text>
