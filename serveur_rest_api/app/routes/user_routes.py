@@ -58,8 +58,7 @@ def get_current_user():
 @user_bp.post("/suivre/<int:user_id>")
 @jwt_required()
 def suivre_utilisateur(user_id):
-    current_user = get_jwt_identity()
-
+    current_user = int(get_jwt_identity())
     if current_user == user_id:
         return jsonify({"erreur": "Vous ne pouvez pas vous suivre"}), 400
 

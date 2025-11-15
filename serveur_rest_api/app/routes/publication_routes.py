@@ -42,7 +42,7 @@ def create_publication():
 
     if not data or "content" not in data:
         return jsonify({"error": "Contenu est requis."}), 400
-    
+ 
     current_user = User.query.get(get_jwt_identity())
 
     new_pub = Publication(
@@ -51,7 +51,7 @@ def create_publication():
     )
     db.session.add(new_pub)
     db.session.commit()
-    
+ 
     #web socket connection
     socketio.emit("new_publication", {
         "id": new_pub.id,
@@ -69,9 +69,32 @@ def publications_par_user(user_id):
         {
             "id": p.id,
             "content": p.content,
+            "auteur": p.user.nom_utilisateur,
             "created_at": p.created_at.isoformat()
         }
         for p in pubs
     ]
 
     return jsonify(result), 200
+
+@publication_bp.get("/suivis")
+@jwt_required()
+def publications_suivies():
+    user_id = get_jwt_identity()
+
+    following = Follow.query.filter_by(follower_id=user_id).all()
+    ids = [f.following_id for f in following]
+
+    pubs = Publication.query.filter(Publication.user_id.in_(ids)) \
+        .order_by(Publication.created_at.desc()) \
+        .all()
+
+    return jsonify([
+        {
+            "id": p.id,
+            "content": p.content,
+            "created_at": p.created_at.isoformat(),
+            "auteur": p.user.nom_utilisateur
+        }
+        for p in pubs
+    ]), 200
