@@ -35,6 +35,7 @@ export default function ProfileScreen() {
 
   const onRefresh = async () => {
     setRefreshing(true);
+    await fetchUser();
     await fetchPublications();
     setRefreshing(false);
   };
