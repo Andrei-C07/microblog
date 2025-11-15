@@ -9,16 +9,30 @@ publication_bp = Blueprint("publication_bp", __name__)
 @publication_bp.get("/")
 @jwt_required()
 def list_publications():
-    publications =  Publication.query.all()
+
+    page = request.args.get("page", 1, type=int)
+    limit = request.args.get("limit", 5, type=int)
+
+    query = Publication.query.order_by(Publication.created_at.desc())
+    total = query.count()
+
+    publications = query.offset((page - 1) * limit).limit(limit).all()
     result = [
         {
             "id": p.id,
             "content": p.content,
-            "created_at": p.created_at,
+            "created_at": p.created_at.isoformat(),
             "auteur": p.user.nom_utilisateur
         } for p in publications
     ]
-    return jsonify(result), 200
+
+    return jsonify({
+        "page": page,
+        "limit": limit,
+        "total": total,
+        "total_pages": (total + limit - 1) // limit,
+        "data": result
+    }), 200
 
 @publication_bp.get("/<int:pub_id>")
 @jwt_required()
@@ -64,32 +78,16 @@ def create_publication():
 @publication_bp.get("/par_user/<int:user_id>")
 @jwt_required()
 def publications_par_user(user_id):
-    pubs = Publication.query.filter_by(user_id=user_id).order_by(Publication.created_at.desc()).all()
+    page = request.args.get("page", 1, type=int)
+    limit = request.args.get("limit", 5, type=int)
+
+    query = Publication.query.filter_by(user_id=user_id) \
+            .order_by(Publication.created_at.desc())
+
+    total = query.count()
+    pubs = query.offset((page - 1) * limit).limit(limit).all()
+
     result = [
-        {
-            "id": p.id,
-            "content": p.content,
-            "auteur": p.user.nom_utilisateur,
-            "created_at": p.created_at.isoformat()
-        }
-        for p in pubs
-    ]
-
-    return jsonify(result), 200
-
-@publication_bp.get("/suivis")
-@jwt_required()
-def publications_suivies():
-    user_id = get_jwt_identity()
-
-    following = Follow.query.filter_by(follower_id=user_id).all()
-    ids = [f.following_id for f in following]
-
-    pubs = Publication.query.filter(Publication.user_id.in_(ids)) \
-        .order_by(Publication.created_at.desc()) \
-        .all()
-
-    return jsonify([
         {
             "id": p.id,
             "content": p.content,
@@ -97,4 +95,44 @@ def publications_suivies():
             "auteur": p.user.nom_utilisateur
         }
         for p in pubs
-    ]), 200
+    ]
+
+    return jsonify({
+        "page": page,
+        "limit": limit,
+        "total": total,
+        "total_pages": (total + limit - 1) // limit,
+        "data": result
+    }), 200
+
+
+@publication_bp.get("/suivis")
+@jwt_required()
+def publications_suivies():
+    page = request.args.get("page", 1, type=int)
+    limit = request.args.get("limit", 5, type=int)
+
+    user_id = get_jwt_identity()
+    following = Follow.query.filter_by(follower_id=user_id).all()
+    ids = [f.following_id for f in following]
+
+    query = Publication.query.filter(Publication.user_id.in_(ids)) \
+                .order_by(Publication.created_at.desc())
+
+    total = query.count()
+    pubs = query.offset((page - 1) * limit).limit(limit).all()
+
+    return jsonify({
+        "page": page,
+        "limit": limit,
+        "total": total,
+        "total_pages": (total + limit - 1) // limit,
+        "data": [
+            {
+                "id": p.id,
+                "content": p.content,
+                "created_at": p.created_at.isoformat(),
+                "auteur": p.user.nom_utilisateur
+            } for p in pubs
+        ]
+    }), 200
