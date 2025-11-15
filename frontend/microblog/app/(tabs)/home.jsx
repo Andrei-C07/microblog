@@ -18,6 +18,8 @@ export default function HomeScreen() {
   const [filter, setFilter] = useState("all");
   const token = useAuthStore((state) => state.token);
   const [userId, setUserId] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchCurrentUser = async () => {
     const res = await fetch("http://localhost:8000/api/utilisateur/current_user", {
@@ -28,17 +30,21 @@ export default function HomeScreen() {
   };
 
   const fetchPosts = async () => {
-    let url = "http://localhost:8000/api/publication/";
+    let url = `http://localhost:8000/api/publication/?page=${page}&limit=5`;
 
-    if (filter === "following") url += "suivis";
-    else if (filter === "mine") url = `http://localhost:8000/api/publication/par_user/${userId}`;
+    if (filter === "following") {
+      url = `http://localhost:8000/api/publication/suivis?page=${page}&limit=5`;
+    } else if (filter === "mine" && userId) {
+      url = `http://localhost:8000/api/publication/par_user/${userId}?page=${page}&limit=5`;
+    }
 
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    const data = await response.json();
-    setPosts(data);
+    const json = await response.json();
+    setPosts(json.data);
+    setTotalPages(json.total_pages);
   };
 
   useEffect(() => {
@@ -47,7 +53,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (userId !== null) fetchPosts();
-  }, [filter, userId]);
+  }, [page, filter, userId]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -96,7 +102,7 @@ export default function HomeScreen() {
       </View>
 
       <FlatList
-        data={posts}
+        data={posts.slice(0,3)}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         refreshControl={
@@ -104,6 +110,27 @@ export default function HomeScreen() {
         }
         contentContainerStyle={{ paddingBottom: 30 }}
       />
+      <View style={styles.pagination}>
+        <TouchableOpacity
+          disabled={page === 1}
+          style={[styles.pageBtn, page === 1 && styles.disabledBtn]}
+          onPress={() => setPage(page - 1)}
+        >
+          <Text style={styles.pageText}>Précédent</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.pageNumber}>
+          Page {page} / {totalPages}
+        </Text>
+
+        <TouchableOpacity
+          disabled={page === totalPages}
+          style={[styles.pageBtn, page === totalPages && styles.disabledBtn]}
+          onPress={() => setPage(page + 1)}
+        >
+          <Text style={styles.pageText}>Suivant</Text>
+        </TouchableOpacity>
+      </View>
       {!isMobile && (
         <View style={styles.refreshWrapper}>
           <button
@@ -123,6 +150,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#D99A79",
     paddingHorizontal: 16,
+    paddingBottom: 80,
   },
   logo: {
     width: 140,
@@ -183,5 +211,27 @@ const styles = StyleSheet.create({
   postDate: {
     fontSize: 12,
     color: "#333",
+  },
+  pagination: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  pageBtn: {
+    backgroundColor: "#A8DDB2",
+    padding: 10,
+    borderRadius: 8,
+  },
+  disabledBtn: {
+    opacity: 0.4,
+  },
+  pageText: {
+    color: "#000",
+    fontWeight: "600",
+  },
+  pageNumber: {
+    color: "#000",
+    fontWeight: "700",
   },
 });
