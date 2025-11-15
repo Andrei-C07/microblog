@@ -78,7 +78,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#D99A79",
+        backgroundColor: "#ff9f6cff",
         alignItems: "center",
         justifyContent: "space-between",
         paddingVertical: 60,
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
         fontSize: 36,
         fontWeight: "600",
         color: "#A7D8B4",
+        fontFamily: "JotiOne_400Regular",
     },
     form: {
         width: "80%",
@@ -96,21 +97,27 @@ const styles = StyleSheet.create({
     input: {
         width: "100%",
         backgroundColor: "#A8DDB2",
+        borderWidth: 2, 
+        borderColor: "#515151ff",
+        borderRadius: 30,
         padding: 14,
-        borderRadius: 10,
         fontSize: 16,
+        fontFamily: "JotiOne_400Regular",
     },
     button: {
         backgroundColor: "#9ADFB0",
         paddingVertical: 12,
         paddingHorizontal: 40,
-        borderRadius: 20,
+        borderWidth: 2, 
+        borderColor: "#515151ff",
+        borderRadius: 30,
         marginTop: 10,
     },
     buttonText: {
         color: "#000",
         fontSize: 16,
         fontWeight: "600",
+        fontFamily: "JotiOne_400Regular",
     },
     logoContainer: {
         alignItems: "center",
