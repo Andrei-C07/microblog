@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/authStore";
 import { isMobile } from "react-device-detect";
@@ -7,34 +15,55 @@ import { isMobile } from "react-device-detect";
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
+  const [filter, setFilter] = useState("all");
   const token = useAuthStore((state) => state.token);
+  const [userId, setUserId] = useState(null);
 
-  const fetchPosts = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/api/publication/", {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      setPosts(data);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des publications :", error);
-    }
+  const fetchCurrentUser = async () => {
+    const res = await fetch("http://localhost:8000/api/utilisateur/current_user", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+    setUserId(data.id);
   };
 
+  const fetchPosts = async () => {
+    let url = "http://localhost:8000/api/publication/";
+
+    if (filter === "following") url += "suivis";
+    else if (filter === "mine") url = `http://localhost:8000/api/publication/par_user/${userId}`;
+
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await response.json();
+    setPosts(data);
+  };
 
   useEffect(() => {
-    fetchPosts();
+    fetchCurrentUser();
   }, []);
+
+  useEffect(() => {
+    if (userId !== null) fetchPosts();
+  }, [filter, userId]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await fetchPosts()
+    await fetchPosts();
     setRefreshing(false);
-  }
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.postCard}>
+      <Text style={styles.postAuthor}>Par : {item.auteur}</Text>
+      <Text style={styles.postContent}>{item.content}</Text>
+      <Text style={styles.postDate}>
+        {new Date(item.created_at).toLocaleString()}
+      </Text>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,17 +71,38 @@ export default function HomeScreen() {
         source={require("../../assets/images/MicroBlogLogo.png")}
         style={styles.logo}
       />
+
+      <View style={styles.filterBar}>
+        <TouchableOpacity
+          style={[styles.filterButton, filter === "all" && styles.activeFilter]}
+          onPress={() => setFilter("all")}
+        >
+          <Text style={styles.filterText}>Tous</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.filterButton, filter === "following" && styles.activeFilter]}
+          onPress={() => setFilter("following")}
+        >
+          <Text style={styles.filterText}>Suivis</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.filterButton, filter === "mine" && styles.activeFilter]}
+          onPress={() => setFilter("mine")}
+        >
+          <Text style={styles.filterText}>Mes Posts</Text>
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id.toString()}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-        renderItem={({ item }) => (
-          <View style={styles.postContainer}>
-            <Text style={styles.postTitle}>Par : {item.auteur}</Text>
-            <Text>{item.content}</Text>
-          </View>
-        )}
+        renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        contentContainerStyle={{ paddingBottom: 30 }}
       />
       {!isMobile && (
         <View style={styles.refreshWrapper}>
@@ -71,26 +121,45 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#D99A79",
     paddingHorizontal: 16,
   },
   logo: {
-    aspectRatio: 1,
-    width: 120,
-    height: 120,
+    width: 140,
+    height: 140,
     resizeMode: "contain",
     alignSelf: "center",
-    marginVertical: 16,
-
+    marginVertical: 12,
   },
-  postContainer: {
-    marginBottom: 16,
+  filterBar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#A8DDB2",
     padding: 12,
-    borderRadius: 8,
-    backgroundColor: "#f0f0f0",
+    borderRadius: 24,
+    marginBottom: 16,
   },
-  postTitle: {
-    fontWeight: "bold",
+  filterButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  activeFilter: {
+    backgroundColor: "#D99A79",
+  },
+  filterText: {
+    fontWeight: "600",
+    color: "#000",
+  },
+  postCard: {
+    backgroundColor: "#A8DDB2",
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 14,
+  },
+  postAuthor: {
+    fontWeight: "700",
+    fontSize: 16,
     marginBottom: 4,
   },
   refreshWrapper: {
@@ -106,5 +175,13 @@ const styles = StyleSheet.create({
     borderColor: "#515151ff",
     borderRadius: 30,
     fontFamily: "JotiOne_400Regular",
-  }
+  },
+  postContent: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  postDate: {
+    fontSize: 12,
+    color: "#333",
+  },
 });

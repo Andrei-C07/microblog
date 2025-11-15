@@ -43,10 +43,14 @@ def get_current_user():
     if not user:
         return jsonify({"error": "User pas trouvé"}), 404
 
+    followers_count = Follow.query.filter_by(following_id=user.id).count()
+    following_count = Follow.query.filter_by(follower_id=user.id).count()
     result = {
         "id": user.id,
         "nom_utilisateur": user.nom_utilisateur,
         "created_at": user.created_at.isoformat(),
+        "followers_count": followers_count,
+        "following_count": following_count,
     }
     return jsonify(result), 200
 
@@ -54,8 +58,7 @@ def get_current_user():
 @user_bp.post("/suivre/<int:user_id>")
 @jwt_required()
 def suivre_utilisateur(user_id):
-    current_user = get_jwt_identity()
-
+    current_user = int(get_jwt_identity())
     if current_user == user_id:
         return jsonify({"erreur": "Vous ne pouvez pas vous suivre"}), 400
 
