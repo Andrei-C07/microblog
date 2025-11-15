@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/authStore";
+import { isMobile } from "react-device-detect";
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
@@ -53,6 +54,16 @@ export default function HomeScreen() {
           </View>
         )}
       />
+      {!isMobile && (
+        <View style={styles.refreshWrapper}>
+          <button
+            style={styles.refreshButton}
+            onClick={handleRefresh}
+          >
+            Rafraîchir la page
+          </button>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -82,4 +93,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 4,
   },
+  refreshWrapper: {
+    width: "100%",
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  refreshButton: {
+    padding: 10,
+    width: 150,
+    backgroundColor: "#ff9f6cff",
+    borderColor: "#515151ff",
+    borderRadius: 30,
+    fontFamily: "JotiOne_400Regular",
+  }
 });

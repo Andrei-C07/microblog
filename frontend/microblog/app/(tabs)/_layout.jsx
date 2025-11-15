@@ -14,6 +14,10 @@ export default function TabLayout() {
                     height: 60,
                     paddingBottom: 6,
                 },
+                tabBarLabelStyle: {
+                    fontSize: 12,
+                    fontFamily: "JotiOne_400Regular",
+                },
             }}
         >
             <Tabs.Screen
