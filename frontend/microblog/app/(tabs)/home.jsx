@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/authStore";
-import { isMobile } from "react-device-detect";
+import { Platform } from "react-native";
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
@@ -20,7 +20,7 @@ export default function HomeScreen() {
   const [userId, setUserId] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const isWeb = Platform.OS === "web";
   const fetchCurrentUser = async () => {
     const res = await fetch("http://localhost:8000/api/utilisateur/current_user", {
       headers: { Authorization: `Bearer ${token}` },
@@ -102,7 +102,7 @@ export default function HomeScreen() {
       </View>
 
       <FlatList
-        data={posts.slice(0,3)}
+        data={posts.slice(0, 3)}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         refreshControl={
@@ -131,7 +131,7 @@ export default function HomeScreen() {
           <Text style={styles.pageText}>Suivant</Text>
         </TouchableOpacity>
       </View>
-      {!isMobile && (
+      {isWeb && (
         <View style={styles.refreshWrapper}>
           <button
             style={styles.refreshButton}
@@ -141,6 +141,7 @@ export default function HomeScreen() {
           </button>
         </View>
       )}
+
     </SafeAreaView>
   );
 }

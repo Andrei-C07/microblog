@@ -30,7 +30,7 @@ export default function ProfileScreen() {
     );
 
     const pubData = await pubRes.json();
-    setPublications(pubData);
+    setPublications(pubData.data);
   };
 
   const onRefresh = async () => {
