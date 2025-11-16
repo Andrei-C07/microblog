@@ -55,7 +55,7 @@ export default function ProfileView({
                     ) : (
                         <TouchableOpacity style={styles.followBtn} onPress={onFollowToggle}>
                             <Text style={styles.followText}>
-                                {user.isFollowing ? "Se désabonner" : "Suivre"}
+                                {user.is_following ? "Se désabonner" : "Suivre"}
                             </Text>
                         </TouchableOpacity>
                     )}

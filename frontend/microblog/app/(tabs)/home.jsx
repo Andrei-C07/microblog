@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/authStore";
 import { Platform } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState([]);
@@ -21,6 +22,8 @@ export default function HomeScreen() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const isWeb = Platform.OS === "web";
+  const router = useRouter();
+
   const fetchCurrentUser = async () => {
     const res = await fetch("http://localhost:8000/api/utilisateur/current_user", {
       headers: { Authorization: `Bearer ${token}` },
@@ -62,13 +65,19 @@ export default function HomeScreen() {
   };
 
   const renderItem = ({ item }) => (
-    <View style={styles.postCard}>
-      <Text style={styles.postAuthor}>Par : {item.auteur}</Text>
-      <Text style={styles.postContent}>{item.content}</Text>
-      <Text style={styles.postDate}>
-        {new Date(item.created_at).toLocaleString()}
-      </Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        router.push(`/${item.user_id}`);
+      }}
+    >
+      <View style={styles.postCard}>
+        <Text style={styles.postAuthor}>Par : {item.auteur}</Text>
+        <Text style={styles.postContent}>{item.content}</Text>
+        <Text style={styles.postDate}>
+          {new Date(item.created_at).toLocaleString()}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (

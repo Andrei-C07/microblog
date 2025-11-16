@@ -1,80 +1,124 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput, View, Text, Button, StyleSheet, Image } from "react-native";
+import {
+  TextInput,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { useAuthStore } from "store/authStore";
 
 export default function NewPostScreen() {
-    const token = useAuthStore((state) => state.token);
-    console.log("Token utilisé:", token);
+  const token = useAuthStore((state) => state.token);
+  const router = useRouter();
+  const [content, setContent] = useState("");
 
-    const [content, setContent] = useState("");
+  const handleAddPost = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/publication/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content }),
+      });
 
-    const handleAddPost = async () => {
-        try {
-            const response = await fetch("http://localhost:8000/api/publication/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    content: content,
-                }),
-            });
-            const data = await response.json();
-            console.log("Publication ajoutée avec succès :", data);
-            if (!response.ok) {
-                alert(data.error || "Erreur lors de l'ajout de la publication");
-                return;
-            }
-            setContent("");
-        } catch (error) {
-            console.error("Erreur lors de l'ajout de la publication :", error);
-        }
-    };
+      const data = await response.json();
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <View>
-                <Image
-                    source={require('../../assets/images/MicroBlogLogo.png')}
-                    style={styles.logo}
-                />
-                <Text style={styles.title}>Ajouter Une Nouvelle Publication</Text>
-                <TextInput
-                    placeholder="Contenu de la publication"
-                    value={content}
-                    multiline
-                    onChangeText={setContent}
-                    style={{ height: 100, borderColor: 'gray', borderWidth: 1, marginBottom: 16, padding: 8 }}
-                />
-                <Button title="Ajouter la Publication" onPress={handleAddPost} />
-            </View>
-        </SafeAreaView>
-    );
+      if (!response.ok) {
+        alert(data.error || "Erreur lors de l'ajout");
+        return;
+      }
+
+      setContent("");
+      router.back();
+    } catch (error) {
+      console.error("Erreur:", error);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Image
+        source={require("../../assets/images/MicroBlogLogo.png")}
+        style={styles.logo}
+      />
+
+      <View style={styles.card}>
+        <Text style={styles.title}>Nouvelle Publication</Text>
+
+        <TextInput
+          placeholder="Écris quelque chose..."
+          placeholderTextColor={"#555"}
+          value={content}
+          multiline
+          onChangeText={setContent}
+          style={styles.input}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleAddPost}>
+          <Text style={styles.buttonText}>Publier</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 16,
+    backgroundColor: "#D99A79",
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
+
   logo: {
-    aspectRatio: 1,
-    width: 120,
-    height: 120,
+    width: 140,
+    height: 140,
     resizeMode: "contain",
     alignSelf: "center",
-    marginVertical: 16,
-
+    marginBottom: 10,
   },
+
+  card: {
+    backgroundColor: "#A8DDB2",
+    padding: 20,
+    borderRadius: 22,
+    elevation: 3,
+  },
+
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#000",
+    marginBottom: 20,
     textAlign: "center",
-    fontFamily: "Dank-Mono",
-  }
+  },
+
+  input: {
+    height: 130,
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 14,
+    fontSize: 16,
+    textAlignVertical: "top",
+    marginBottom: 20,
+  },
+
+  button: {
+    backgroundColor: "#007aff",
+    paddingVertical: 14,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "700",
+  },
 });

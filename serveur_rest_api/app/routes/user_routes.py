@@ -28,10 +28,22 @@ def get_user(user_id):
     if not user:
         return jsonify({"error": "User pas trouver"}), 404
 
+    current_user_id = get_jwt_identity()
+
+    followers_count = Follow.query.filter_by(following_id=user.id).count()
+    following_count = Follow.query.filter_by(follower_id=user.id).count()
+    is_following = Follow.query.filter_by(
+        follower_id=current_user_id,
+        following_id=user.id
+    ).first() is not None
+
     result = {
         "id": user.id,
         "nom_utilisateur": user.nom_utilisateur,
         "created_at": user.created_at.isoformat(),
+        "followers_count": followers_count,
+        "following_count": following_count,
+        "is_following": is_following
     }
     return jsonify(result), 200
 
@@ -76,7 +88,7 @@ def suivre_utilisateur(user_id):
 
     return jsonify({"message": "Followed successfully"}), 201
 
-@user_bp.delete("/ne_plus_suivre/<int:user_id>")
+@user_bp.delete("/suivre/<int:user_id>")
 @jwt_required()
 def unfollow_user(user_id):
     current_user = get_jwt_identity()

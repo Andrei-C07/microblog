@@ -22,7 +22,8 @@ def list_publications():
             "id": p.id,
             "content": p.content,
             "created_at": p.created_at.isoformat(),
-            "auteur": p.user.nom_utilisateur
+            "auteur": p.user.nom_utilisateur,
+            "user_id": p.user_id
         } for p in publications
     ]
 
@@ -92,7 +93,8 @@ def publications_par_user(user_id):
             "id": p.id,
             "content": p.content,
             "created_at": p.created_at.isoformat(),
-            "auteur": p.user.nom_utilisateur
+            "auteur": p.user.nom_utilisateur,
+            "user_id": p.user_id,
         }
         for p in pubs
     ]
@@ -132,7 +134,8 @@ def publications_suivies():
                 "id": p.id,
                 "content": p.content,
                 "created_at": p.created_at.isoformat(),
-                "auteur": p.user.nom_utilisateur
+                "auteur": p.user.nom_utilisateur,
+                "user_id": p.user_id
             } for p in pubs
         ]
     }), 200
