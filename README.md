@@ -5,8 +5,12 @@ publier des messages,suivre ou ne plus suivre d’autres utilisateurs,
 voir les publications en temps réel grâce à WebSocket,
 filtrer les messages (tous / suivis / mes posts),
 naviguer entre les pages de publications avec pagination,
-gérer une session (login/logout).
+gérer une session (login/logout). 
 
+## **Audience cible**
+L’application vise principalement les jeunes adultes et membres de petites communautés cherchant une plateforme minimaliste pour publier et consulter des messages courts en temps réel, sans la complexité d’un réseau social complet.
+
+## **Tech Stack**
 L’application utilise une **architecture REST API**, un **frontend React Native**, et un **backend Flask avec SQLite3**.
 
 ## 👥 **Membres de l’équipe**
