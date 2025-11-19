@@ -7,10 +7,10 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
+  Platform
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/authStore";
-import { Platform } from "react-native";
 import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
@@ -65,19 +65,25 @@ export default function HomeScreen() {
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        router.push(`/${item.user_id}`);
-      }}
-    >
+    <TouchableOpacity onPress={() => {router.push(`/post/${item.id}`)}}>
       <View style={styles.postCard}>
-        <Text style={styles.postAuthor}>Par : {item.auteur}</Text>
+        <Text style={styles.postAuthor}>
+          <TouchableOpacity
+            onPress={() => {
+              router.push(`/user/${item.user_id}`);
+            }}
+          >
+            <Text style={styles.postAuthor}> Par : {item.auteur} </Text>
+          </TouchableOpacity>
+
+        </Text>
         <Text style={styles.postContent}>{item.content}</Text>
         <Text style={styles.postDate}>
           {new Date(item.created_at).toLocaleString()}
         </Text>
       </View>
     </TouchableOpacity>
+
   );
 
   return (

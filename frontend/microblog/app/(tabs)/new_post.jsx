@@ -17,6 +17,10 @@ export default function NewPostScreen() {
   const [content, setContent] = useState("");
 
   const handleAddPost = async () => {
+
+    if (content.trim() == null || content.trim() === ""){
+        
+    }
     try {
       const response = await fetch("http://localhost:8000/api/publication/", {
         method: "POST",
@@ -61,7 +65,7 @@ export default function NewPostScreen() {
         />
       </View>
       <View style={{ alignItems: "center" }}>
-        <TouchableOpacity style={styles.button} onPress={handleAddPost}>
+        <TouchableOpacity style={[styles.button, content.trim() === "" && styles.disabledBtn]} onPress={handleAddPost} disabled={content.trim() === ""}>
           <Text style={styles.buttonText}>Publier</Text>
         </TouchableOpacity>
       </View>
@@ -135,5 +139,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     fontFamily: "JotiOne_400Regular",
+  },
+
+  disabledBtn: {
+    opacity: 0.4,
   },
 });

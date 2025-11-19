@@ -45,7 +45,8 @@ def get_publication(pub_id):
             "id": publication.id,
             "content": publication.content,
             "created_at": publication.created_at,
-            "auteur": publication.user.nom_utilisateur
+            "auteur": publication.user.nom_utilisateur,
+            "user_id": publication.user.id,
     }
     return jsonify(result), 200
 
