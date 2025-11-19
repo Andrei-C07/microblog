@@ -59,11 +59,13 @@ export default function NewPostScreen() {
           onChangeText={setContent}
           style={styles.input}
         />
-
+      </View>
+      <View style={{ alignItems: "center" }}>
         <TouchableOpacity style={styles.button} onPress={handleAddPost}>
           <Text style={styles.buttonText}>Publier</Text>
         </TouchableOpacity>
       </View>
+      
     </SafeAreaView>
   );
 }
@@ -71,7 +73,7 @@ export default function NewPostScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D99A79",
+    backgroundColor: "#FFB67D",
     paddingHorizontal: 20,
     paddingTop: 20,
   },
@@ -85,7 +87,9 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: "#A8DDB2",
+    backgroundColor: "#BAFFAC",
+    borderColor: "#5A5A5A",
+    borderWidth: 3,
     padding: 20,
     borderRadius: 22,
     elevation: 3,
@@ -94,31 +98,42 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "700",
-    color: "#000",
+    color: "#5A5A5A",
     marginBottom: 20,
     textAlign: "center",
+    fontFamily: "JotiOne_400Regular",
   },
 
   input: {
     height: 130,
     backgroundColor: "#fff",
+    borderColor: "#5A5A5A",
+    borderWidth: 3,
     borderRadius: 16,
     padding: 14,
     fontSize: 16,
     textAlignVertical: "top",
     marginBottom: 20,
+    fontFamily: "JotiOne_400Regular",
   },
 
   button: {
-    backgroundColor: "#007aff",
+    marginTop: 20,
+    width: 200,
+    backgroundColor: "#5A5A5A",
     paddingVertical: 14,
     borderRadius: 20,
     alignItems: "center",
+    borderColor: "#000000ff",
+    borderWidth: 3,
+    padding: 20,
+    borderRadius: 22,
   },
 
   buttonText: {
-    color: "white",
+    color: "#A8E4E7",
     fontSize: 18,
     fontWeight: "700",
+    fontFamily: "JotiOne_400Regular",
   },
 });

@@ -92,23 +92,45 @@ export default function HomeScreen() {
           style={[styles.filterButton, filter === "all" && styles.activeFilter]}
           onPress={() => setFilter("all")}
         >
-          <Text style={styles.filterText}>Tous</Text>
+          <Text
+            style={[
+              styles.filterText,
+              filter === "all" && styles.activeFilterText
+            ]}
+          >
+            Tous
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.filterButton, filter === "following" && styles.activeFilter]}
           onPress={() => setFilter("following")}
         >
-          <Text style={styles.filterText}>Suivis</Text>
+          <Text
+            style={[
+              styles.filterText,
+              filter === "following" && styles.activeFilterText
+            ]}
+          >
+            Suivis
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.filterButton, filter === "mine" && styles.activeFilter]}
           onPress={() => setFilter("mine")}
         >
-          <Text style={styles.filterText}>Mes Posts</Text>
+          <Text
+            style={[
+              styles.filterText,
+              filter === "mine" && styles.activeFilterText
+            ]}
+          >
+            Mes Posts
+          </Text>
         </TouchableOpacity>
       </View>
+
 
       <FlatList
         data={posts.slice(0, 3)}
@@ -158,7 +180,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D99A79",
+    backgroundColor: "#FFB67D",
     paddingHorizontal: 16,
     paddingBottom: 80,
   },
@@ -172,7 +194,12 @@ const styles = StyleSheet.create({
   filterBar: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: "#A8DDB2",
+    backgroundColor: "#5A5A5A",
+    shadowColor: "#000",
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 10,
     padding: 12,
     borderRadius: 24,
     marginBottom: 16,
@@ -183,14 +210,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   activeFilter: {
-    backgroundColor: "#D99A79",
+    backgroundColor: "#FFB67D",
+  },
+  activeFilterText: {
+    color: "black",
   },
   filterText: {
     fontWeight: "600",
-    color: "#000",
+    color: "#A8E4E7",
+    fontFamily: "JotiOne_400Regular",
   },
   postCard: {
-    backgroundColor: "#A8DDB2",
+    backgroundColor: "#BAFFAC",
+    borderColor: "#5A5A5A",
+    borderWidth: 3,
     padding: 16,
     borderRadius: 16,
     marginBottom: 14,
@@ -209,8 +242,8 @@ const styles = StyleSheet.create({
   refreshButton: {
     padding: 10,
     width: 150,
-    backgroundColor: "#ff9f6cff",
-    borderColor: "#515151ff",
+    backgroundColor: "#A8E4E7",
+    borderColor: "#5A5A5A",
     borderRadius: 30,
     fontFamily: "JotiOne_400Regular",
   },
@@ -229,7 +262,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   pageBtn: {
-    backgroundColor: "#A8DDB2",
+    backgroundColor: "#5A5A5A",
     padding: 10,
     borderRadius: 8,
   },
@@ -237,11 +270,13 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   pageText: {
-    color: "#000",
+    color: "#A8E4E7",
     fontWeight: "600",
+    fontFamily: "JotiOne_400Regular",
   },
   pageNumber: {
     color: "#000",
     fontWeight: "700",
+    fontFamily: "JotiOne_400Regular",
   },
 });

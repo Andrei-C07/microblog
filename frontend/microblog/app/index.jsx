@@ -43,7 +43,7 @@ export default function LoginScreen() {
                 <TextInput
                     style={styles.input}
                     placeholder="Nom d’utilisateur"
-                    placeholderTextColor="#6E8F73"
+                    placeholderTextColor="#6f8d72ff"
                     value={username}
                     onChangeText={setUsername}
                     autoCapitalize="False"
@@ -52,7 +52,7 @@ export default function LoginScreen() {
                 <TextInput
                     style={styles.input}
                     placeholder="Mot de passe"
-                    placeholderTextColor="#6E8F73"
+                    placeholderTextColor="#6f8d72ff"
                     secureTextEntry
                     value={password}
                     onChangeText={setPassword}
@@ -78,7 +78,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#ff9f6cff",
+        backgroundColor: "#FFB67D",
         alignItems: "center",
         justifyContent: "space-between",
         paddingVertical: 60,
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 36,
         fontWeight: "600",
-        color: "#A7D8B4",
+        color: "#BAFFAC",
         fontFamily: "JotiOne_400Regular",
     },
     form: {
@@ -96,25 +96,25 @@ const styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        backgroundColor: "#A8DDB2",
+        backgroundColor: "#BAFFAC",
         borderWidth: 2, 
-        borderColor: "#515151ff",
+        borderColor: "#5A5A5A",
         borderRadius: 30,
         padding: 14,
         fontSize: 16,
         fontFamily: "JotiOne_400Regular",
     },
     button: {
-        backgroundColor: "#9ADFB0",
+        backgroundColor: "#BAFFAC",
         paddingVertical: 12,
         paddingHorizontal: 40,
         borderWidth: 2, 
-        borderColor: "#515151ff",
+        borderColor: "#5A5A5A",
         borderRadius: 30,
         marginTop: 10,
     },
     buttonText: {
-        color: "#000",
+        color: "#5A5A5A",
         fontSize: 16,
         fontWeight: "600",
         fontFamily: "JotiOne_400Regular",

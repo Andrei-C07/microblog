@@ -75,8 +75,8 @@ export default function UserProfileScreen() {
   if (!user) return <ActivityIndicator style={{ flex: 1 }} />;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#D99A79" }}>
-      <TouchableOpacity onPress={() => router.back()} style={{ padding: 10 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFB67D",}}>
+      <TouchableOpacity onPress={() => router.back()} style={{ padding: 10}}>
         <Ionicons name="arrow-back" size={26} color={"black"} />
       </TouchableOpacity>
 

@@ -65,7 +65,7 @@ export default function ProfileView({
                     data={publications}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
-                    style={{ width: "100%" }}
+                    style={{ width: "100%"}}
                     contentContainerStyle={{ paddingBottom: 40 }}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -80,22 +80,28 @@ export default function ProfileView({
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: "#D99A79",
+        backgroundColor: "#FFB67D",
     },
     container: {
         flex: 1,
-        backgroundColor: "#D99A79",
+        backgroundColor: "#FFB67D",
         paddingHorizontal: 20,
         paddingTop: 30,
     },
 
     header: {
         alignItems: "center",
-        backgroundColor: "#A8DDB2",
+        backgroundColor: "#5A5A5A",
         padding: 25,
         borderRadius: 22,
         marginBottom: 25,
         elevation: 4,
+        borderColor: "#000",
+        borderWidth: 3,
+        shadowColor: "#000",
+        shadowOpacity: 0.7,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 3 },
     },
 
     avatar: {
@@ -110,12 +116,14 @@ const styles = StyleSheet.create({
     username: {
         fontSize: 28,
         fontWeight: "700",
-        color: "#000",
+        color: "#A8E4E7",
+        fontFamily: "JotiOne_400Regular",
     },
 
     memberSince: {
+        fontFamily: "JotiOne_400Regular",
         fontSize: 14,
-        color: "#444",
+        color: "#A8E4E7",
         marginTop: 4,
     },
 
@@ -131,25 +139,28 @@ const styles = StyleSheet.create({
     },
 
     statNumber: {
+        fontFamily: "JotiOne_400Regular",
         fontSize: 20,
         fontWeight: "700",
-        color: "#000",
+        color: "#A8E4E7",
     },
 
     statLabel: {
+        fontFamily: "JotiOne_400Regular",
         fontSize: 14,
-        color: "#333",
+        color: "#A8E4E7",
     },
 
     logoutBtn: {
         marginTop: 20,
-        backgroundColor: "#ff3b30",
+        backgroundColor: "#EA6767",
         paddingVertical: 12,
         paddingHorizontal: 40,
         borderRadius: 20,
     },
 
     logoutText: {
+        fontFamily: "JotiOne_400Regular",
         color: "white",
         fontSize: 16,
         fontWeight: "600",
@@ -157,7 +168,7 @@ const styles = StyleSheet.create({
 
     followBtn: {
         marginTop: 20,
-        backgroundColor: "#007aff",
+        backgroundColor: "#FFB67D",
         paddingVertical: 12,
         paddingHorizontal: 40,
         borderRadius: 20,
@@ -167,21 +178,25 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 16,
         fontWeight: "600",
+        fontFamily: "JotiOne_400Regular", 
     },
 
     sectionTitle: {
         fontSize: 22,
         fontWeight: "700",
-        color: "black",
+        color: "#5A5A5A",
         marginBottom: 10,
         paddingLeft: 4,
+        fontFamily: "JotiOne_400Regular",
     },
 
     postCard: {
-        backgroundColor: "#A8DDB2",
+        backgroundColor: "#BAFFAC",
+        marginBottom: 15,
+        borderColor: "#5A5A5A",
+        borderWidth: 3,
         padding: 16,
         borderRadius: 16,
-        marginBottom: 15,
     },
 
     postContent: {
