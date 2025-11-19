@@ -1,8 +1,10 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Text } from "react-native";
+import { Text, Platform } from "react-native";
 
 export default function TabLayout() {
+  const isWeb = Platform.OS === "web";
+
   return (
     <Tabs
       screenOptions={({ route }) => ({
@@ -26,25 +28,30 @@ export default function TabLayout() {
           elevation: 10,
         },
 
-        tabBarLabel: ({ focused, color }) => (
-          <Text
-            style={{
-              color,
-              fontSize: 20,
-              fontFamily: "JotiOne_400Regular",
-              textDecorationLine: focused ? "underline" : "none",
-            }}
-          >
-            {route.name === "new_post" ? "Ajouter une publication" : 
-             route.name.charAt(0).toUpperCase() + route.name.slice(1)}
-          </Text>
-        ),
+        tabBarLabel: ({ focused, color }) => {
+          if (!isWeb) return null; 
+
+          return (
+            <Text
+              style={{
+                color,
+                fontSize: 12,
+                fontFamily: "JotiOne_400Regular",
+                textDecorationLine: focused ? "underline" : "none",
+              }}
+            >
+              {route.name === "new_post"
+                ? "Ajouter une publication"
+                : route.name.charAt(0).toUpperCase() + route.name.slice(1)}
+            </Text>
+          );
+        },
       })}
     >
       <Tabs.Screen
         name="home"
         options={{
-          title: "Home",
+          ...(isWeb && { title: "Home" }),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" color={color} size={size} />
           ),
@@ -54,7 +61,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="new_post"
         options={{
-          title: "Ajouter une publication",
+          ...(isWeb && { title: "Ajouter une publication" }),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="add-circle-outline" color={color} size={size} />
           ),
@@ -64,7 +71,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          ...(isWeb && { title: "Profile" }),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" color={color} size={size} />
           ),

@@ -39,12 +39,12 @@ export default function ProfileView({
                     <View style={styles.statsContainer}>
                         <View style={styles.statBox}>
                             <Text style={styles.statNumber}>{user.followers_count}</Text>
-                            <Text style={styles.statLabel}>Followers</Text>
+                            <Text style={styles.statLabel}>Abonnés</Text>
                         </View>
 
                         <View style={styles.statBox}>
                             <Text style={styles.statNumber}>{user.following_count}</Text>
-                            <Text style={styles.statLabel}>Following</Text>
+                            <Text style={styles.statLabel}>Abonnements</Text>
                         </View>
                     </View>
 
