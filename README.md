@@ -45,6 +45,7 @@ pip install -r requirements.txt
 ### Lancer le serveur Flask
 ```bash
 python main.py
+```
 
 Le backend démarre par défaut sur :
 👉 **http://localhost:8000**
