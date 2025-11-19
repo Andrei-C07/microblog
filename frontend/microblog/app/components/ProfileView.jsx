@@ -1,5 +1,6 @@
 import { View, Text, Image, TouchableOpacity, FlatList, RefreshControl, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 
 export default function ProfileView({
     user,
@@ -13,12 +14,14 @@ export default function ProfileView({
     if (!user) return null;
 
     const renderItem = ({ item }) => (
+      <TouchableOpacity onPress={() => router.push(`/post/${item.id}`)} >
         <View style={styles.postCard}>
             <Text style={styles.postContent}>{item.content}</Text>
             <Text style={styles.postDate}>
                 {new Date(item.created_at).toLocaleDateString()}
             </Text>
         </View>
+        </TouchableOpacity>
     );
 
     return (
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#FFB67D",
         paddingHorizontal: 20,
-        paddingTop: 30,
+        paddingTop: 0,
     },
 
     header: {
