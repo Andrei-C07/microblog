@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useAuthStore } from "store/authStore";
+import { useAuthStore } from "../store/authStore";
 import ProfileView from "./components/ProfileView";
 import { Ionicons } from "@expo/vector-icons";
 

@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { useAuthStore } from "store/authStore";
+import { useAuthStore } from "../../store/authStore.js";
 
 export default function NewPostScreen() {
   const token = useAuthStore((state) => state.token);

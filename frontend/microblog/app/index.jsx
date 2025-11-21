@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { useAuthStore } from "store/authStore";
+import { useAuthStore } from "../store/authStore.js";
 
 export default function LoginScreen() {
     const router = useRouter();
